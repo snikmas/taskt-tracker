@@ -3,22 +3,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        // process:
+        // errors: handle wrong input
+        // task.name is unknown?
 
-        // task - the simplest
-        // name
-        // descrioption
-        // id
-        // status 4.1 (new, no one has touched it) 4.2 in progress; 4.3 done
-        //
-        // epic - task with subtasks (big task)
-        // subtask
-
-        // task: 1) common task 2) epic 3) subtask
-        // requirements:
-        // podtask knows to which epic it belongs
-        // epic knows all their subtasks
-        //
          // hints:
         // abstract class
         // class for object-manager: runs when the program starts
@@ -52,7 +39,21 @@ public class Main {
             System.out.println("[6] Remove a Task");
             System.out.println("[0] Exit");
 
-            userInput = scanner.nextInt();
+
+            // safely get input
+            while (true) {
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input! Please enter a number.");
+                    scanner.next();
+                }
+
+                userInput = scanner.nextInt();
+                if(userInput < 0 || userInput > 6 ) {
+                    System.out.println("Invalid input! Please enter a valid number.");
+                } else {
+                    break;
+                }
+            }
 
             switch(userInput) {
                 case 1 -> {
