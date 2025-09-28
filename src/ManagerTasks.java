@@ -24,6 +24,11 @@ public class ManagerTasks {
             System.out.println("All Tasks:");
             getAllTasks();
 
+            if(tasks.isEmpty()){
+                System.out.println("There are no tasks!");
+                return;
+            }
+
             System.out.println("To which task you would like to add a subtack?");
 
             while(true){
@@ -71,7 +76,7 @@ public class ManagerTasks {
 
     }
 
-    public  void getAllTasks(){
+    public void getAllTasks(){
 
 
         // check for a size!
@@ -80,9 +85,9 @@ public class ManagerTasks {
             return;
         }
 
-        for(int i = 0; i < tasks.size(); i++){
+        for(int i = 1; i <= tasks.size(); i++){
             Task task = tasks.get(i);
-            System.out.println("1. Task: " + task.name);
+            System.out.println(i + ". Task: " + task.name);
             System.out.println("Task Info:");
             System.out.println("Description: " + task.description);
             System.out.println("Status: " + task.status);
@@ -100,12 +105,35 @@ public class ManagerTasks {
             System.out.println("\n");
         }
 
-        System.out.println("Back to Menu...");
     }
 
     public void clearAllTasks(){
+        if(tasks.isEmpty()){
+            System.out.println("There are no tasks! Nothing to delete!");
+            return;
+        }
+        getAllTasks();
 
+        System.out.println("Are you sure you want to delete all tasks? [Y/N]");
 
+        while(true){
+            String input = scanner.nextLine().trim();
+            while(input.isEmpty()){
+                System.out.println("Invalid input. Please try again!");
+                continue;
+            }
+
+            char userInput = Character.toUpperCase(input.charAt(0));
+
+            if(userInput == 'Y'){
+                tasks.clear();
+                System.out.println("All Tasks deleted!");
+            } else if (userInput == 'N') {
+                System.out.println("Deletion process was canceled, back to menu...");
+            } else {
+                System.out.println("Invalid input. Please try again! [Y/N]");
+            }
+        }
     }
 
     public void getTask(){

@@ -60,7 +60,21 @@ public class Main {
                     System.out.println("What kind of task do you want?");
                     System.out.println("[1] Create a new task");
                     System.out.println("[2] Add a subtask to an existing task");
-                    taskOption = scanner.nextInt();
+
+                    while (true) {
+                        while (!scanner.hasNextInt()) {
+                            System.out.println("Invalid input! Please enter a number.");
+                            scanner.next();
+                        }
+
+                        taskOption = scanner.nextInt();
+                        if(taskOption < 1 || taskOption > 2 ) {
+                            System.out.println("Invalid input! Please enter a valid number.");
+                        } else {
+                            break;
+                        }
+                    }
+
                     switch (taskOption) {
                         case 1 -> manager.createTask("task");
                         case 2 -> manager.createTask("subtask");
