@@ -1,31 +1,7 @@
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-        HashMap<Integer, Task> tasks = new HashMap<>();
-
-        // errors: handle wrong input
-        // task.name is unknown?
-
-         // hints:
-        // abstract class
-        // class for object-manager: runs when the program starts
-        // 1) able to save all kind of tasks
-        // 2) methods for every type of task
-        // 2) 1) get all tasks
-        // 2) 2) delete all tasks
-        // 2) 3) get by id
-        // 2) 4) creating
-        // 2) 5) update
-        // 2) 5) delete by id
-        // 3) other methods:
-        // 4) 1) status managing: : manager doesn't handle the status of the task, it will get it when task's managing
-        // 4) epics:
-        // 4) 2) if an epic doesnt have subtask / they all have status "new" -> epic is a new
-        // 4) 2) if all epic's subtasks done -> epic is also done
-        // otherwise: in progress
 
         System.out.println("Welcome! This is Your Personal Task Tracker App.\n");
         int userInput = -1;
@@ -42,8 +18,6 @@ public class Main {
             System.out.println("[6] Remove a Task");
             System.out.println("[0] Exit");
 
-
-            // safely get input
             while (true) {
                 while (!scanner.hasNextInt()) {
                     System.out.println("Invalid input! Please enter a number.");
@@ -81,9 +55,9 @@ public class Main {
                     switch (taskOption) {
                         case 1 -> manager.createTask("task");
                         case 2 -> manager.createTask("subtask");
-
                     }
                 }
+
                 case 2 -> manager.getAllTasks();
                 case 3 -> manager.clearAllTasks();
                 case 4 -> manager.getTask();
@@ -92,10 +66,6 @@ public class Main {
                 case 0 -> System.out.println("Bye!");
 
             }
-
-
         }
-
-
     }
 }

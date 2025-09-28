@@ -1,25 +1,17 @@
-import java.sql.SQLOutput;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
-
 public class ManagerTasks {
 
-    // global id
     int id = 1;
-
+    int userInput = -1;
     Scanner scanner = new Scanner(System.in);
-
     public HashMap<Integer, Task> tasks = new HashMap<>();
 
 
-
-    int userInput = -1;
     public void createTask(String typeTask){
-        // "task" || "susbtask"
 
         Task task = new Task();
 
@@ -49,12 +41,8 @@ public class ManagerTasks {
                     break;
                 }
             }
-
-
             task.parentId = userInput;
-
         }
-
 
         System.out.print("Task name: ");
         task.name = scanner.nextLine();
@@ -67,9 +55,7 @@ public class ManagerTasks {
         } else {
             tasks.put(id, task);
         }
-
         id++;
-
 
         System.out.println("Task Created!");
         System.out.println("Task Name: " + task.name);
@@ -83,8 +69,6 @@ public class ManagerTasks {
 
     public void getAllTasks(){
 
-
-        // check for a size!
         if(tasks.isEmpty()){
             System.out.println("No Tasks found!");
             return;
@@ -108,12 +92,9 @@ public class ManagerTasks {
                     System.out.println("\tDescription: " + subtask.description);
                     System.out.println("\tStatus: " + subtask.status);
                 }
-
             }
-
             System.out.println("\n");
         }
-
     }
 
     public void clearAllTasks(){
@@ -129,7 +110,6 @@ public class ManagerTasks {
             String input = scanner.nextLine().trim();
             while(input.isEmpty()){
                 System.out.println("Invalid input. Please try again!");
-                continue;
             }
 
             char userInput = Character.toUpperCase(input.charAt(0));
@@ -154,7 +134,6 @@ public class ManagerTasks {
             int id = Integer.parseInt(scanner.nextLine());
             if(!tasks.containsKey(id)){
                 System.out.println("Task doesn't exist! Please try again!");
-                continue;
             } else {
                 Task task = tasks.get(id);
                 System.out.println("Task: " + task.name);
@@ -169,7 +148,6 @@ public class ManagerTasks {
                         System.out.println("\tDescription: " + subtask.description);
                     }
                 }
-
                 System.out.println("\n");
                 System.out.println("What you find another task? [Y]");
                 String input = scanner.nextLine().trim();
@@ -177,12 +155,8 @@ public class ManagerTasks {
                     System.out.println("Back to menu...");
                     return;
                 }
-
             }
-
         }
-
-
     }
 
     public void upDateTask(){
@@ -190,7 +164,6 @@ public class ManagerTasks {
         Task task = new Task();
         getAllTasks();
         System.out.println("Which task would you like to update? Input its id");
-
 
         int userInput;
         boolean flag = true;
@@ -223,7 +196,6 @@ public class ManagerTasks {
                 System.out.println("Invalid input. Please try again!");
                 scanner.next();
             }
-
             userInput = scanner.nextInt();
             scanner.nextLine();
             if(userInput < 1 || userInput > 4){
@@ -231,14 +203,12 @@ public class ManagerTasks {
                 continue;
             }
 
-
             switch(userInput){
                 case 1 -> update("name", task);
                 case 2 -> update("description", task);
                 case 3 -> update("status", task);
                 case 4 -> update("subtasks", task);
             }
-
             System.out.println("Updated! Back to menu...");
             return;
 
@@ -329,7 +299,7 @@ public class ManagerTasks {
                         System.out.println("Invalid input! Enter a number:");
                     }
                 }
-                break;
+            break;
         }
     }
 
@@ -351,6 +321,7 @@ public class ManagerTasks {
                 System.out.println("Invalid input. Please try again!");
                 scanner.next();
             }
+
             userInput = scanner.nextInt();
             scanner.nextLine();
 
@@ -363,7 +334,5 @@ public class ManagerTasks {
                 return;
             }
         }
-
     }
-
 }
