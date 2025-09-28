@@ -1,4 +1,5 @@
 import java.sql.SQLOutput;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -89,10 +90,12 @@ public class ManagerTasks {
             return;
         }
 
-        for(int i = 1; i <= tasks.size(); i++){
-            Task task = tasks.get(i);
-            System.out.println(i + ". Task: " + task.name);
+        for(Map.Entry<Integer, Task> entry : tasks.entrySet()){
+            int taskId = entry.getKey();
+            Task task = entry.getValue();
+            System.out.println(taskId + ". Task: " + task.name);
             System.out.println("Task Info:");
+            System.out.println("TaskId:" + taskId);
             System.out.println("Description: " + task.description);
             System.out.println("Status: " + task.status);
 
@@ -101,6 +104,7 @@ public class ManagerTasks {
                 for (Map.Entry<Integer, Task> subEntry : task.subtasks.entrySet()) {
                     Task subtask = subEntry.getValue();
                     System.out.println("\tSubtask: " + subtask.name);
+                    System.out.println("\tSubtaskId: " + subtask.id);
                     System.out.println("\tDescription: " + subtask.description);
                     System.out.println("\tStatus: " + subtask.status);
                 }
@@ -183,7 +187,7 @@ public class ManagerTasks {
 
     public void upDateTask(){
 
-        Task task;
+        Task task = new Task();
         getAllTasks();
         System.out.println("Which task would you like to update? Input its id");
 
@@ -198,6 +202,7 @@ public class ManagerTasks {
             }
 
             userInput = scanner.nextInt();
+            scanner.nextLine();
             if(!tasks.containsKey(userInput)){
                 System.out.println("Task doesn't exist! Please try again!");
                 continue;
@@ -207,7 +212,7 @@ public class ManagerTasks {
             flag = false;
         }
 
-        System.out.println("What task would you update?\n");
+        System.out.println("What would you like to update?\n");
         System.out.println("[1] Name");
         System.out.println("[2] Description");
         System.out.println("[3] Status");
@@ -220,11 +225,12 @@ public class ManagerTasks {
             }
 
             userInput = scanner.nextInt();
-            if(!(userInput <= 1 && userInput >= tasks.size())){
-                System.out.println("Invalid input. Please try again!");
-                scanner.next();
+            scanner.nextLine();
+            if(userInput < 1 || userInput > 4){
+                System.out.println("Invalid input. Try again!");
                 continue;
             }
+
 
             switch(userInput){
                 case 1 -> update("name", task);
@@ -235,12 +241,12 @@ public class ManagerTasks {
 
             System.out.println("Updated! Back to menu...");
             return;
-        }
 
+        }
     }
 
-    public void update(String taskName, Task task){
-        switch(taskName){
+    public void update(String taskField, Task task) {
+        switch(taskField) {
             case "name":
                 System.out.println("Task name: " + task.name);
                 System.out.println("Input new name:");
@@ -254,23 +260,79 @@ public class ManagerTasks {
             case "status":
                 System.out.println("Task status: " + task.status);
                 System.out.println("Input new status: NEW / IN_PROGRESS / DONE");
-                task.status = Status.NEW;
+                String newStatus = scanner.nextLine().trim().toUpperCase();
+                try {
+                    task.status = Status.valueOf(newStatus);
+
+                    if(task.parentId != -1){
+                        Task parentTask = tasks.get(task.parentId);
+
+                        // collect all subtasks of this parent
+                        Collection<Task> subtasks = parentTask.subtasks.values();
+
+                        // update parent status based on subtasks
+                        if(subtasks.stream().allMatch(sub -> sub.status == Status.NEW)){
+                            parentTask.status = Status.NEW;
+                        } else if(subtasks.stream().allMatch(sub -> sub.status == Status.DONE)){
+                            parentTask.status = Status.DONE;
+                        } else {
+                            parentTask.status = Status.IN_PROGRESS;
+                        }
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid status! Status not changed.");
+                }
                 break;
+
             case "subtasks":
                 if(task.subtasks.isEmpty()){
                     System.out.println("There are no subtasks!");
                     return;
-                } else {
-                    System.out.println("Which subtask would you like to update? Input its id");
-                    int subtaskId = Integer.parseInt(scanner.nextLine());
-                    update(task.subtasks.get(subtaskId).name, task);
-
-                    break;
                 }
 
-        }
+                System.out.println("Which subtask would you like to update? Input its id");
+                int subtaskId;
+                while(true){
+                    try {
+                        subtaskId = Integer.parseInt(scanner.nextLine());
+                        if(!task.subtasks.containsKey(subtaskId)){
+                            System.out.println("Subtask doesn't exist! Try again:");
+                        } else {
+                            break;
+                        }
+                    } catch(NumberFormatException e){
+                        System.out.println("Invalid input. Enter a number:");
+                    }
+                }
 
+                System.out.println("What would you like to change?");
+                System.out.println("[1] Name");
+                System.out.println("[2] Description");
+                System.out.println("[3] Status");
+
+                int choice;
+                while(true){
+                    try {
+                        choice = Integer.parseInt(scanner.nextLine());
+                        switch(choice){
+                            case 1 -> update("name", task.subtasks.get(subtaskId));
+                            case 2 -> update("description", task.subtasks.get(subtaskId));
+                            case 3 -> update("status", task.subtasks.get(subtaskId));
+                            default -> {
+                                System.out.println("Invalid choice! Try again:");
+                                continue;
+                            }
+                        }
+                        break;
+                    } catch(NumberFormatException e){
+                        System.out.println("Invalid input! Enter a number:");
+                    }
+                }
+                break;
+        }
     }
+
 
 
 
@@ -290,6 +352,7 @@ public class ManagerTasks {
                 scanner.next();
             }
             userInput = scanner.nextInt();
+            scanner.nextLine();
 
             if(!tasks.containsKey(userInput)){
                 System.out.println("Task doesn't exist! Please try again!");
@@ -302,10 +365,5 @@ public class ManagerTasks {
         }
 
     }
-
-
-
-
-
 
 }
