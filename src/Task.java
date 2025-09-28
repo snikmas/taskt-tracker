@@ -9,14 +9,7 @@ public class Task {
     Status status;
 
     int parentId = -1;
-    HashMap<Integer, Task> subtasks = new HashMap<>();
-
-//    public Task() {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.status = status;
-//    }
+    public HashMap<Integer, Task> subtasks = new HashMap<>();
 
 
 }

@@ -1,7 +1,10 @@
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        HashMap<Integer, Task> tasks = new HashMap<>();
 
         // errors: handle wrong input
         // task.name is unknown?
